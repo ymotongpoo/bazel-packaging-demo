@@ -7,6 +7,13 @@ new_git_repository(
     build_file = "@//:BUILD.skicka",
 )
 
+new_git_repository(
+    name = "pprof",
+    remote = "https://github.com/google/pprof.git",
+    branch = "master",
+    build_file = "@//:BUILD.pprof",
+)
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 RULES_GO_VER = "0.22.4"
@@ -108,3 +115,7 @@ rules_pkg_dependencies()
 load("//:skicka_repos.bzl", "skicka_go_repositories")
 
 skicka_go_repositories()
+
+load("//:pprof_repos.bzl", "pprof_go_repositories")
+
+pprof_go_repositories()

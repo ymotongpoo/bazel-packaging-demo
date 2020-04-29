@@ -3,7 +3,7 @@ load("@bazel_gazelle//:deps.bzl", "go_repository")
 # NOTE: this files is generated with the following commands:
 # $ git clone github.com/google/skicka
 # $ cd skicka
-# $ go mod inti github.com/google/skicka
+# $ go mod init github.com/google/skicka
 # $ go mod tidy
 # $ touch WORKSPACE
 # $ gazelle -go_prefix github.com/google/skicka

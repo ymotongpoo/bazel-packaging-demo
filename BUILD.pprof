@@ -11,42 +11,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@bazel_gazelle//:def.bzl", "gazelle")
-load("@rules_pkg//:pkg.bzl", "pkg_tar", "pkg_deb")
 
-exports_files(["LICENSE"])
-
-
-############################
-# github.com/google/skicka
-############################
-
-MAINTAINER = "Yoshi Yamaguchi <@ymotongpoo>"
-
-pkg_tar(
-    name = "skicka-bin",
-    package_dir = "/usr/local/bin",
-    srcs = ["@skicka//:skicka"],
-    mode = "0755",
+# gazelle:prefix github.com/google/pprof
+gazelle(
+    name = "pprof_gazelle_update",
+    external = "external",
+    command = "update",
+    extra_args = ["-build_file_name=BUILD.pprof"],
 )
 
-pkg_tar(
-    name = "skicka-data",
-    extension = "tar.gz",
+go_library(
+    name = "go_default_library",
+    srcs = ["pprof.go"],
+    importpath = "github.com/google/pprof",
+    visibility = ["//visibility:private"],
     deps = [
-        ":skicka-bin",
+        ":pprof_gazelle_update",
+        "//driver:go_default_library",
+        "@com_github_chzyer_readline//:go_default_library",
     ],
 )
 
-pkg_deb(
-    name = "skicka-deb",
-    package = "skicka",
-    description = "Command-line utility for working with Google Drive.",
-    architecture = "amd64",
-    data = ":skicka-data",
-    maintainer = MAINTAINER,
-    homepage = "https://github.com/google/skicka",
-    version = "20190419",
+go_binary(
+    name = "pprof",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
 )
