@@ -22,8 +22,16 @@ def skicka_go_repositories():
     go_repository(
         name = "com_github_cheggaaa_pb",
         importpath = "github.com/cheggaaa/pb",
-        sum = "h1:gLKifR1UkZ/kLkda5gC0K6c8g+jU2sINPtBeOiNlMhU=",
-        version = "v2.0.7+incompatible",
+        build_file_generation = "on",
+        build_file_proto_mode = "disable",
+	commit = "b1a2c91ab62c055f83d9aeae6faeec43b7fd3510",
+    )
+    go_repository(
+	name = "com_github_mattn_go_runewidth",
+	importpath = "github.com/mattn/go-runewidth",
+	build_file_generation = "on",
+	build_file_proto_mode = "disable",
+	commit = "14e809f6d78fcf9f48ff9b70981472b64c05f754",
     )
     go_repository(
         name = "com_github_client9_misspell",

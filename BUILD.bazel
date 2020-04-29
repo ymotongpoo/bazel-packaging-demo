@@ -22,6 +22,7 @@ gazelle(name = "gazelle")
 
 go_binary(
     name = "skicka",
+    out = "skicka",
     embed = ["@skicka//:go_default_library"],
     visibility = ["//visibility:public"],
 )
