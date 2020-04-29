@@ -87,6 +87,24 @@ rules_proto_dependencies()
 
 rules_proto_toolchains()
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+RULES_PKG_VER = "0.2.6"
+RULES_PKG_SHA256 = "a5cca9cf01c7fcfe4aab8ef54ce590e49c4921fa0d4d194b5f0ad732a8b207c4"
+
+http_archive(
+    name = "rules_pkg",
+    urls = [
+        "https://github.com/bazelbuild/rules_pkg/releases/download/%s/rules_pkg-%s.tar.gz" % (RULES_PKG_VER, RULES_PKG_VER),
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/%s/rules_pkg-%s.tar.gz" % (RULES_PKG_VER, RULES_PKG_VER),
+    ],
+    sha256 = RULES_PKG_SHA256,
+)
+
+load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
+
+rules_pkg_dependencies()
+
 load("//:skicka_repos.bzl", "skicka_go_repositories")
 
 skicka_go_repositories()
