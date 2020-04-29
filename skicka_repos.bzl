@@ -1,5 +1,17 @@
 load("@bazel_gazelle//:deps.bzl", "go_repository")
 
+# NOTE: this files is generated with the following commands:
+# $ git clone github.com/google/skicka
+# $ cd skicka
+# $ go mod inti github.com/google/skicka
+# $ go mod tidy
+# $ touch WORKSPACE
+# $ gazelle -go_prefix github.com/google/skicka
+# $ gazelle update-repos -from_file go.mod -to_macro=skicka_repos.bzl%skicka_go_repositories
+# $ cp BUILD.bazel /path/to/this/repo/BUILD.skicka
+# $ cp skika_repos.bzl /path/to/this/repo/
+#
+# After craeting BUILD.skika and skicka_repos.bzl, still hand edits are required to resolve build errors.ssssssssC
 def skicka_go_repositories():
     go_repository(
         name = "co_honnef_go_tools",
@@ -19,19 +31,21 @@ def skicka_go_repositories():
         sum = "h1:glEXhBS5PSLLv4IXzLA5yPRVX4bilULVyxxbrfOtDAk=",
         version = "v0.2.1",
     )
+    # NOTE: google/skicka only works with ver1.x.
     go_repository(
         name = "com_github_cheggaaa_pb",
         importpath = "github.com/cheggaaa/pb",
         build_file_generation = "on",
         build_file_proto_mode = "disable",
-	commit = "b1a2c91ab62c055f83d9aeae6faeec43b7fd3510",
+	    commit = "b1a2c91ab62c055f83d9aeae6faeec43b7fd3510",
     )
+    # NOTE: mattn/go-runewidth is required by cheggaaa/pb v1.x.
     go_repository(
-	name = "com_github_mattn_go_runewidth",
-	importpath = "github.com/mattn/go-runewidth",
-	build_file_generation = "on",
-	build_file_proto_mode = "disable",
-	commit = "14e809f6d78fcf9f48ff9b70981472b64c05f754",
+        name = "com_github_mattn_go_runewidth",
+        importpath = "github.com/mattn/go-runewidth",
+        build_file_generation = "on",
+        build_file_proto_mode = "disable",
+        commit = "14e809f6d78fcf9f48ff9b70981472b64c05f754",
     )
     go_repository(
         name = "com_github_client9_misspell",
