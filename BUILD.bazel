@@ -12,18 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
-load("@bazel_gazelle//:def.bzl", "gazelle")
 load("@rules_pkg//:pkg.bzl", "pkg_tar", "pkg_deb")
 
 exports_files(["LICENSE"])
 
+MAINTAINER = "Yoshi Yamaguchi <@ymotongpoo>"
 
 ############################
 # github.com/google/skicka
 ############################
-
-MAINTAINER = "Yoshi Yamaguchi <@ymotongpoo>"
 
 pkg_tar(
     name = "skicka-bin",
@@ -49,4 +46,34 @@ pkg_deb(
     maintainer = MAINTAINER,
     homepage = "https://github.com/google/skicka",
     version = "20190419",
+)
+
+############################
+# github.com/google/pprof
+############################
+
+pkg_tar(
+    name = "pprof-bin",
+    package_dir = "/usr/local/bin",
+    srcs = ["@pprof//:pprof"],
+    mode = "0755",
+)
+
+pkg_tar(
+    name = "pprof-data",
+    extension = "tar.gz",
+    deps = [
+        ":pprof-bin",
+    ],
+)
+
+pkg_deb(
+    name = "pprof-deb",
+    package = "pprof",
+    description = "pprof is a tool for visualization and analysis of profiling data.",
+    architecture = "amd64",
+    data = ":pprof-data",
+    maintainer = MAINTAINER,
+    homepage = "https://github.com/google/pprof",
+    version = "20190430",
 )
