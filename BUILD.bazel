@@ -13,8 +13,15 @@
 # limitations under the License.
 
 load("@rules_pkg//:pkg.bzl", "pkg_tar", "pkg_deb")
+load("@bazel_gazelle//:def.bzl", "gazelle")
 
-exports_files(["LICENSE"])
+# gazelle:prefix github.com/ymotongpoo/bazel-packaging-demo
+gazelle(name = "gazelle")
+
+exports_files([
+    "LICENSE",
+    "pprof.patch",
+])
 
 MAINTAINER = "Yoshi Yamaguchi <@ymotongpoo>"
 
@@ -25,7 +32,7 @@ MAINTAINER = "Yoshi Yamaguchi <@ymotongpoo>"
 pkg_tar(
     name = "skicka-bin",
     package_dir = "/usr/local/bin",
-    srcs = ["@skicka//:skicka"],
+    srcs = ["@com_github_google_skicka//:skicka"],
     mode = "0755",
 )
 
@@ -55,7 +62,7 @@ pkg_deb(
 pkg_tar(
     name = "pprof-bin",
     package_dir = "/usr/local/bin",
-    srcs = ["@pprof//:pprof"],
+    srcs = ["@com_github_google_pprof//:pprof"],
     mode = "0755",
 )
 
@@ -75,5 +82,5 @@ pkg_deb(
     data = ":pprof-data",
     maintainer = MAINTAINER,
     homepage = "https://github.com/google/pprof",
-    version = "20190430",
+    version = "20200430",
 )

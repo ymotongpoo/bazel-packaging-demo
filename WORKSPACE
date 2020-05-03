@@ -1,18 +1,6 @@
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
-
-new_git_repository(
-    name = "skicka",
-    remote = "https://github.com/google/skicka.git",
-    branch = "master",
-    build_file = "@//:BUILD.skicka",
-)
-
-new_git_repository(
-    name = "pprof",
-    remote = "https://github.com/google/pprof.git",
-    branch = "master",
-    build_file = "@//:BUILD.pprof",
-)
+############################
+# rules_go
+############################
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
@@ -25,18 +13,6 @@ http_archive(
     urls = [
         "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v%s/rules_go-v%s.tar.gz" % (RULES_GO_VER, RULES_GO_VER),
         "https://github.com/bazelbuild/rules_go/releases/download/v%s/rules_go-v%s.tar.gz" % (RULES_GO_VER, RULES_GO_VER),
-    ],
-)
-
-BAZEL_GAZELLE_VER = "0.20.0"
-BAZEL_GAZELLE_SHA256 = "d8c45ee70ec39a57e7a05e5027c32b1576cc7f16d9dd37135b0eddde45cf1b10"
-
-http_archive(
-    name = "bazel_gazelle",
-    sha256 = BAZEL_GAZELLE_SHA256,
-    urls = [
-        "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (BAZEL_GAZELLE_VER, BAZEL_GAZELLE_VER),
-        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (BAZEL_GAZELLE_VER, BAZEL_GAZELLE_VER),
     ],
 )
 
@@ -57,6 +33,22 @@ go_download_sdk(
 go_rules_dependencies()
 
 go_register_toolchains()
+
+############################
+# Gazelle
+############################
+
+BAZEL_GAZELLE_VER = "0.20.0"
+BAZEL_GAZELLE_SHA256 = "d8c45ee70ec39a57e7a05e5027c32b1576cc7f16d9dd37135b0eddde45cf1b10"
+
+http_archive(
+    name = "bazel_gazelle",
+    sha256 = BAZEL_GAZELLE_SHA256,
+    urls = [
+        "https://storage.googleapis.com/bazel-mirror/github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (BAZEL_GAZELLE_VER, BAZEL_GAZELLE_VER),
+        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (BAZEL_GAZELLE_VER, BAZEL_GAZELLE_VER),
+    ],
+)
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
@@ -94,7 +86,9 @@ rules_proto_dependencies()
 
 rules_proto_toolchains()
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+############################
+# rules_pkg
+############################
 
 RULES_PKG_VER = "0.2.6"
 RULES_PKG_SHA256 = "a5cca9cf01c7fcfe4aab8ef54ce590e49c4921fa0d4d194b5f0ad732a8b207c4"
@@ -112,10 +106,26 @@ load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
 
-load("//:skicka_repos.bzl", "skicka_go_repositories")
+############################
+# rules_pkg
+############################
 
-skicka_go_repositories()
+load("@bazel_gazelle//:deps.bzl", "go_repository")
 
-load("//:pprof_repos.bzl", "pprof_go_repositories")
+go_repository(
+    name = "com_github_google_skicka",
+    importpath = "github.com/google/skicka",
+    commit = "5c371f",
+    build_file_generation = "on",
+)
 
-pprof_go_repositories()
+go_repository(
+    name = "com_github_google_pprof",
+    importpath = "github.com/google/pprof",
+    commit = "fc25d7d",
+    build_file_generation = "on",
+)
+
+# gazelle:repository_macro pprof_go_repository.bzl%pprof_go_repository
+# gazelle:repository go_repository name=com_github_chzyer_readline importpath=github.com/chezyer/readline
+
